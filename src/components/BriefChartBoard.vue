@@ -1,8 +1,8 @@
 <template>
   <div class="container">
-    <el-image :src="src" fit="cover"></el-image>
-    <h1 class="chart-title">{{title}}</h1>
-    <p class="subtitle">查看更多 ></p>
+    <el-image :src="src" fit="cover" class="chart-cover"></el-image>
+    <div><h1 class="chart-title">{{title}}</h1></div>
+    <div><p class="subtitle">查看更多 ></p></div>
   </div>
 </template>
 
@@ -17,7 +17,7 @@ export default {
 </script>
 
 <style scoped>
-.el-image {
+.chart-cover {
   height: 250px;
   width: 250px;
   border-radius: 10px;
@@ -45,5 +45,9 @@ export default {
 
 .container:hover .subtitle{
   opacity: 1;
+}
+
+.container {
+  position: relative;
 }
 </style>

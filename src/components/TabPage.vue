@@ -1,5 +1,5 @@
 <template>
-  <el-tabs v-model="firstPage" class="box">
+  <el-tabs v-model="firstPage">
     <el-tab-pane name="1">
       <template #label>
         <b>首页</b>
@@ -8,7 +8,7 @@
     </el-tab-pane>
     <el-tab-pane name="2">
       <template #label>
-        <b>推荐</b>
+        <b>精品书评</b>
       </template>
       <RecommendPage></RecommendPage>
     </el-tab-pane>
@@ -23,6 +23,12 @@
         <b>新品上架</b>
       </template>
       <LatestBookPage></LatestBookPage>
+    </el-tab-pane>
+    <el-tab-pane name="5">
+      <template #label>
+        <b>畅销推荐</b>
+      </template>
+
     </el-tab-pane>
   </el-tabs>
 </template>

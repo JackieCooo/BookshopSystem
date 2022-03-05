@@ -20,8 +20,11 @@
             <el-descriptions-item label="出版时间">{{info.firstBookInfo.time}}</el-descriptions-item>
             <el-descriptions-item label="出版社">{{info.firstBookInfo.publisher}}</el-descriptions-item>
             <el-descriptions-item label="价格">{{info.firstBookInfo.price}}元</el-descriptions-item>
-            <el-descriptions-item v-if="info.firstBookInfo.hasEBook">
-              <el-tag effect="dark">电子书</el-tag>
+            <el-descriptions-item v-if="info.firstBookInfo.hasEBook || info.firstBookInfo.hasSecondhandBook">
+              <el-space>
+                <el-tag v-if="info.firstBookInfo.hasEBook" effect="dark">电子书</el-tag>
+                <el-tag v-if="info.firstBookInfo.hasSecondhandBook" effect="dark">二手书</el-tag>
+              </el-space>
             </el-descriptions-item>
           </el-descriptions>
           <el-menu>
@@ -61,6 +64,7 @@ export default {
         publisher: String,
         price: Number,
         hasEBook: Boolean,
+        hasSecondhandBook: Boolean,
       },
       bookInfo: [
         {

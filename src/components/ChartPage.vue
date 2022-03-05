@@ -1,14 +1,14 @@
 <template>
   <div>
-    <el-space direction="vertical" size="large">
+    <el-space direction="vertical" :size="20">
       <DetailedChartBoard :info="hottestSeller"></DetailedChartBoard>
       <DetailedChartBoard :info="newestSeller"></DetailedChartBoard>
-      <el-space size="large">
+      <el-space :size="50">
         <BriefChartBoard :title="literatureChart.title" :src="literatureChart.src"></BriefChartBoard>
         <BriefChartBoard :title="historyChart.title" :src="historyChart.src"></BriefChartBoard>
         <BriefChartBoard :title="societyChart.title" :src="societyChart.src"></BriefChartBoard>
       </el-space>
-      <el-space size="large">
+      <el-space :size="50">
         <BriefChartBoard :title="novelChart.title" :src="novelChart.src"></BriefChartBoard>
         <BriefChartBoard :title="scienceChart.title" :src="scienceChart.src"></BriefChartBoard>
         <BriefChartBoard :title="artChart.title" :src="artChart.src"></BriefChartBoard>
@@ -40,7 +40,8 @@ export default {
           time: '2021-9',
           publisher: '北京联合出版公司',
           price: 52.00,
-          hasEBook: true
+          hasEBook: true,
+          hasSecondhandBook: false,
         },
         bookInfo: [
           {id: 2, lastRank: 1, name: '置身事内：中国政府与经济发展', author: '兰小欢'},
@@ -60,7 +61,8 @@ export default {
           time: '2022-1',
           publisher: '上海人民出版社',
           price: 56.00,
-          hasEBook: true
+          hasEBook: true,
+          hasSecondhandBook: true,
         },
         bookInfo: [
           {id: 2, lastRank: 1, name: '民族的神话：欧洲的中世纪起源', author: '[美]帕特里克·格里'},
@@ -82,15 +84,15 @@ export default {
         src: require('@/assets/bookChart/historyCover.jpg'),
       },
       societyChart: {
-        title: '文学榜',
+        title: '社会榜',
         src: require('@/assets/bookChart/societyCover.jpg'),
       },
       scienceChart: {
-        title: '文学榜',
+        title: '科学榜',
         src: require('@/assets/bookChart/scienceCover.jpg'),
       },
       artChart: {
-        title: '文学榜',
+        title: '艺术榜',
         src: require('@/assets/bookChart/artCover.jpg'),
       },
     }
