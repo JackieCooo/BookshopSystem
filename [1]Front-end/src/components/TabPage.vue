@@ -28,7 +28,7 @@
       <template #label>
         <b>畅销推荐</b>
       </template>
-
+      <HottestSellersPage></HottestSellersPage>
     </el-tab-pane>
   </el-tabs>
 </template>
@@ -44,6 +44,7 @@ import RecommendPage from "@/components/RecommendPage";
 import ChartPage from "@/components/ChartPage";
 import LatestBookPage from "@/components/LatestBookPage";
 import FrontPage from "@/components/FrontPage";
+import HottestSellersPage from "@/components/HottestSellersPage";
 
 export default {
   name: "TabPage",
@@ -51,39 +52,31 @@ export default {
     RecommendPage,
     ChartPage,
     LatestBookPage,
-    FrontPage
+    FrontPage,
+    HottestSellersPage,
   }
 }
 </script>
 
 <style scoped>
-:deep(.el-tabs__active-bar) {
+.el-tabs__active-bar {
   background-color: #337ecc;
   height: 5px;
 }
 
-:deep(.el-tabs__item.is-active) {
+.el-tabs__item.is-active {
   color: #409eff;
   font-family: "微软雅黑", serif;
   font-size: 20px;
 }
 
-:deep(.el-tabs__item) {
+.el-tabs__item {
   color: black;
   font-family: "微软雅黑", serif;
   font-size: 15px;
 }
 
-:deep(.el-tabs__item:hover) {
+.el-tabs__item:hover {
   color: #409eff;
-}
-
-:deep(el-tabs__nav-wrap) {
-  box-shadow: 0 2px 10px 0 rgba(0, 0, 0, 0.15);
-}
-
-:deep(.el-tabs__nav-scroll){
-  border-bottom: 1px solid #000000;
-  box-shadow: 0 2px 10px 0 rgba(0, 0, 0, 0.15);
 }
 </style>

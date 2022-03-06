@@ -1,10 +1,11 @@
 <template>
   <el-container>
     <el-header>
+      <WindowHeader></WindowHeader>
     </el-header>
     <el-container>
       <el-main>
-        <TapBar class="top-bar"></TapBar>
+        <TapBar></TapBar>
         <TabPage></TabPage>
       </el-main>
     </el-container>
@@ -14,17 +15,18 @@
 <script>
 import TapBar from "@/components/TopBar";
 import TabPage from "@/components/TabPage";
+import WindowHeader from "@/components/WindowHeader";
 
 export default {
   name: 'MainFrame',
   components : {
     TapBar,
-    TabPage
+    TabPage,
+    WindowHeader,
   }
 }
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 .el-container {
   height: 100%;
@@ -40,9 +42,5 @@ export default {
   /*height: 100%;*/
   /*margin: 0;*/
   /*padding: 0;*/
-}
-
-.top-bar {
-  /*background-color: gray;*/
 }
 </style>
