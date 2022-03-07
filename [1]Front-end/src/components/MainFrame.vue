@@ -3,12 +3,14 @@
     <el-header>
       <WindowHeader></WindowHeader>
     </el-header>
-    <el-container>
-      <el-main>
-        <TapBar></TapBar>
-        <TabPage></TabPage>
-      </el-main>
-    </el-container>
+    <el-scrollbar>
+      <el-container>
+        <el-main>
+          <TapBar></TapBar>
+          <TabPage></TabPage>
+        </el-main>
+      </el-container>
+    </el-scrollbar>
   </el-container>
 </template>
 

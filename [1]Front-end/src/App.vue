@@ -1,7 +1,5 @@
 <template>
-  <el-scrollbar>
-    <MainFrame></MainFrame>
-  </el-scrollbar>
+  <MainFrame></MainFrame>
 </template>
 
 <script>
