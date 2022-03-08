@@ -1,82 +1,78 @@
 <template>
-  <el-tabs v-model="firstPage">
-    <el-tab-pane name="1">
-      <template #label>
-        <b>首页</b>
-      </template>
-      <FrontPage></FrontPage>
-    </el-tab-pane>
-    <el-tab-pane name="2">
-      <template #label>
-        <b>精品书评</b>
-      </template>
-      <RecommendPage></RecommendPage>
-    </el-tab-pane>
-    <el-tab-pane name="3">
-      <template #label>
-        <b>排行榜</b>
-      </template>
-      <ChartPage></ChartPage>
-    </el-tab-pane>
-    <el-tab-pane name="4">
-      <template #label>
-        <b>新品上架</b>
-      </template>
-      <LatestBookPage></LatestBookPage>
-    </el-tab-pane>
-    <el-tab-pane name="5">
-      <template #label>
-        <b>畅销推荐</b>
-      </template>
-      <HottestSellersPage></HottestSellersPage>
-    </el-tab-pane>
-  </el-tabs>
+  <div class="test">
+    <el-row :gutter="0" class="tab-bar" justify="space-around">
+      <el-button type="text" @click="gotoPage(1)" class="tab-btn"><h3>首页</h3></el-button>
+      <el-button type="text" @click="gotoPage(2)" class="tab-btn"><h3>热门书评</h3></el-button>
+      <el-button type="text" @click="gotoPage(3)" class="tab-btn"><h3>排行榜</h3></el-button>
+      <el-button type="text" @click="gotoPage(4)" class="tab-btn"><h3>畅销推荐</h3></el-button>
+      <el-button type="text" @click="gotoPage(5)" class="tab-btn"><h3>新品上市</h3></el-button>
+    </el-row>
+    <div class="view">
+      <router-view></router-view>
+    </div>
+  </div>
 </template>
 
-<script setup>
-import {ref} from 'vue'
-
-const firstPage = ref('1')
-</script>
-
 <script>
-import RecommendPage from "@/components/RecommendPage";
-import ChartPage from "@/components/ChartPage";
-import LatestBookPage from "@/components/LatestBookPage";
-import FrontPage from "@/components/FrontPage";
-import HottestSellersPage from "@/components/HottestSellersPage";
-
 export default {
   name: "TabPage",
   components : {
-    RecommendPage,
-    ChartPage,
-    LatestBookPage,
-    FrontPage,
-    HottestSellersPage,
+  },
+  data() {
+    return {
+      thisPage: 1,
+    }
+  },
+/*
+  created() {
+    this.$router.replace('/')
+  },
+*/
+  methods: {
+    gotoPage(name) {
+      switch (name) {
+        case 1:
+          this.$router.replace('/')
+            this.thisPage = 1
+          break
+        case 2:
+          this.$router.replace('/recommend')
+          this.thisPage = 2
+          break
+        case 3:
+          this.$router.replace('/chart')
+          this.thisPage = 3
+          break
+        case 4:
+          this.$router.replace('/hottest')
+          this.thisPage = 4
+          break
+        case 5:
+          this.$router.replace('/latest')
+          this.thisPage = 5
+          break
+      }
+    }
   }
 }
 </script>
 
 <style scoped>
-.el-tabs__active-bar {
-  background-color: #337ecc;
-  height: 5px;
-}
-
-.el-tabs__item.is-active {
-  color: #409eff;
-  font-family: "微软雅黑", serif;
-  font-size: 20px;
-}
-
-.el-tabs__item {
+.tab-btn {
   color: black;
-  font-family: "微软雅黑", serif;
+  font-family: "PingFang SC", sans-serif;
   font-size: 15px;
+  margin-top: 10px;
 }
 
-.el-tabs__item:hover {
-  color: #409eff;
+.tab-bar {
+  border-bottom: 3px solid #DCDFE6;
+  padding-left: 150px;
+  padding-right: 150px;
 }
+
+.view {
+  padding-top: 30px;
+}
+
 </style>

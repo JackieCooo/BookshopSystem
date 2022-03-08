@@ -44,9 +44,9 @@ export default {
 <style scoped>
 .box-border {
   border-radius: 10px;
-  border: 1px solid var(--el-border-color-base);
-  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
   width: 250px;
+  border: 1px solid #E4E7ED;
+  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1)
 }
 
 .el-menu-item {

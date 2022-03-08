@@ -61,7 +61,7 @@ const testContent = [
   width: 18px;
   height: 8px;
   border-radius: 8px;
-  background-color: #DCDFE6;
+  background-color: white;
 }
 
 :deep(.is-active .el-carousel__button) {
