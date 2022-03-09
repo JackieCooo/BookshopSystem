@@ -42,13 +42,20 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="less" scoped>
 .el-row {
   margin-top: 20px;
   height: 75px;
 }
 
-.search-btn {
-  background-color: #409eff;
+:deep(.el-input__inner) {
+  //background-color: red;
+  border-color: var(--el-color-primary);
+}
+
+:deep(.el-input) {
+  //border: 3px solid #409EFF;
+  //border-radius: 10px;
+  //border-color: var(--el-color-primary);
 }
 </style>

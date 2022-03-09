@@ -1,28 +1,33 @@
 <template>
   <div>
-    <el-space direction="vertical" alignment="start">
+    <el-space direction="vertical" alignment="start" :size="0">
       <h1 class="title">{{name}}</h1>
-      <el-space alignment="start">
+      <el-space alignment="start" size="large">
         <el-image :src="pic" fit="contain"></el-image>
-        <el-space direction="vertical" alignment="start" class="description">
-          <p>作者: {{author}}</p>
-          <p>出版社: {{publisher}}</p>
-          <p>出版时间: {{time}}</p>
-          <p>价格: {{price}}元</p>
-          <p>ISBN: {{isbnCode}}</p>
+        <el-space direction="vertical" alignment="start" class="description" size="large">
+          <div><span class="gray-text">作者: </span>{{author}}</div>
+          <div><span class="gray-text">出版社: </span>{{publisher}}</div>
+          <div><span class="gray-text">出版时间: </span>{{time}}</div>
+          <div><span class="gray-text">价格: </span>{{price}}</div>
+          <div><span class="gray-text">ISBN: </span>{{isbnCode}}</div>
         </el-space>
       </el-space>
-      <el-space class="purchase-bar" :size="40">
-        <el-select v-model="selectVal">
+      <el-space class="purchase-bar">
+        <span class="gray-text">选择类型: </span>
+        <el-select v-model="bookType">
           <el-option label="全新整书" :value="1"></el-option>
           <el-option label="二手书" :value="2" :disabled="!hasSecondhandBook"></el-option>
           <el-option label="电子书" :value="3" :disabled="!hasEBook"></el-option>
         </el-select>
+        <span class="gray-text">选择数量: </span>
         <el-input-number v-model="bookNum" :min="1"></el-input-number>
-        <el-button type="warning"><h3>加入购物车</h3></el-button>
-        <el-button type="danger"><h3>立即购买</h3></el-button>
       </el-space>
-      <el-collapse v-model="collapseNum">
+      <el-space class="purchase-bar">
+        <div class="price-text">¥ {{getPrice}}</div>
+        <el-button type="warning" class="purchase-btn"><h3>加入购物车</h3></el-button>
+        <el-button type="danger"  class="purchase-btn"><h3>立即购买</h3></el-button>
+      </el-space>
+      <el-collapse v-model="collapseNum" class="collapse-box">
         <el-collapse-item :name="1">
           <template #title>
             <h3 class="collapse-title">内容简介</h3>
@@ -55,8 +60,6 @@
 <script setup>
 import {ref} from 'vue'
 
-const selectVal = ref('全新整书')
-const bookNum = ref(1)
 const collapseNum = ref(1)
 </script>
 
@@ -96,6 +99,24 @@ export default {
           '11　永生是什么\n' +
           '14　奇点临近\n' +
           '16　一个无边的路由器',
+      totalPrice: 0,
+      bookNum: 1,
+      bookType: '全新整书',
+    }
+  },
+  methods: {
+  },
+  computed: {
+    getPrice() {
+      switch (this.bookType) {
+        case '全新整书':
+          return this.bookNum * this.price
+        case '二手书':
+          return this.bookNum * this.price
+        case '电子书':
+          return this.bookNum * this.price
+        default: return 0
+      }
     }
   },
 }
@@ -103,16 +124,45 @@ export default {
 
 <style scoped>
 .el-image {
-  width: 300px;
-  height: 400px;
+  width: 200px;
+  height: 300px;
 }
 
 .title {
   font-size: 30px;
-  margin-left: 20px;
 }
 
 .purchase-bar {
   margin-top: 50px;
+}
+
+.gray-text {
+  color: #909399;
+}
+
+.collapse-box {
+  width: 900px;
+  margin-top: 100px;
+}
+
+.el-select {
+  margin-right: 50px;
+}
+
+.purchase-btn {
+  height: 50px;
+  width: 150px;
+  margin-left: 50px;
+}
+
+.price-text {
+  font-weight: bold;
+  font-size: 30px;
+  color: #F56C6C;
+  width: 150px;
+}
+
+.collapse-title {
+  color: #337ecc;
 }
 </style>

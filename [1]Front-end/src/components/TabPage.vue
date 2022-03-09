@@ -32,23 +32,23 @@ export default {
     gotoPage(name) {
       switch (name) {
         case 1:
-          this.$router.replace('/')
+          this.$router.push('/')
             this.thisPage = 1
           break
         case 2:
-          this.$router.replace('/recommend')
+          this.$router.push('/recommend')
           this.thisPage = 2
           break
         case 3:
-          this.$router.replace('/chart')
+          this.$router.push('/chart')
           this.thisPage = 3
           break
         case 4:
-          this.$router.replace('/hottest')
+          this.$router.push('/hottest')
           this.thisPage = 4
           break
         case 5:
-          this.$router.replace('/latest')
+          this.$router.push('/latest')
           this.thisPage = 5
           break
       }
@@ -67,8 +67,8 @@ export default {
 
 .tab-bar {
   border-bottom: 3px solid #DCDFE6;
-  padding-left: 150px;
-  padding-right: 150px;
+  padding-left: 350px;
+  padding-right: 350px;
 }
 
 .view {
