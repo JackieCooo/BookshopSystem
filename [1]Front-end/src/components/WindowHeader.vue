@@ -2,11 +2,11 @@
   <div>
     <el-row justify="space-between">
       <el-space spacer="|" :size="15">
-        <el-button type="text">首页</el-button>
-        <el-button type="text">精选书评</el-button>
-        <el-button type="text">排行榜</el-button>
-        <el-button type="text">新品上架</el-button>
-        <el-button type="text">畅销推荐</el-button>
+        <el-button type="text" @click="gotoPage('/front')">首页</el-button>
+        <el-button type="text" @click="gotoPage('/recommend')">精选书评</el-button>
+        <el-button type="text" @click="gotoPage('/chart')">排行榜</el-button>
+        <el-button type="text" @click="gotoPage('/latest')">新品上架</el-button>
+        <el-button type="text" @click="gotoPage('/hottest')">畅销推荐</el-button>
       </el-space>
       <el-space v-if="isLogin" spacer="|" :size="15">
         <div>您好，{{userName}}</div>
@@ -44,6 +44,11 @@ export default {
   },
   components: {
     ArrowDown,
+  },
+  methods: {
+    gotoPage(site) {
+      this.$router.push(site)
+    }
   }
 }
 </script>

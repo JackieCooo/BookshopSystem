@@ -3,13 +3,14 @@
     <el-col :span="18">
       <el-input placeholder="请输入书本名称" v-model="input" size="large">
         <template #append>
-          <el-button :icon="Search" type="primary" class="search-btn"></el-button>
+          <el-button><el-icon><Search /></el-icon></el-button>
         </template>
       </el-input>
     </el-col>
     <el-col :span = "6">
-      <el-dropdown size="large">
-        <el-button type="primary">
+      <el-dropdown>
+        <el-button type="primary" class="shop-cart-btn">
+          <el-icon class="el-icon--left"><ShoppingCart /></el-icon>
           购物车
           <el-icon class="el-icon--right"><ArrowDownBold /></el-icon>
         </el-button>
@@ -27,17 +28,20 @@
   </el-row>
 </template>
 
-<script setup>
-import {Search, ArrowDownBold} from "@element-plus/icons-vue"
-</script>
-
 <script>
+import {Search, ArrowDownBold, ShoppingCart} from "@element-plus/icons-vue"
+
 export default {
   name: "SearchPanel",
   data() {
     return {
       input : ''
     }
+  },
+  components: {
+    Search,
+    ArrowDownBold,
+    ShoppingCart,
   }
 }
 </script>
@@ -49,13 +53,29 @@ export default {
 }
 
 :deep(.el-input__inner) {
-  //background-color: red;
   border-color: var(--el-color-primary);
+  border-radius: 8px;
+  border-width: 3px;
 }
 
-:deep(.el-input) {
-  //border: 3px solid #409EFF;
-  //border-radius: 10px;
-  //border-color: var(--el-color-primary);
+:deep(.el-input__inner:hover) {
+  border-color: var(--el-color-primary);
+  border-radius: 8px;
+  border-width: 3px;
+}
+
+:deep(.el-input-group__append) {
+  border-color: var(--el-color-primary);
+  border-top-right-radius: 8px;
+  border-bottom-right-radius: 8px;
+  border-width: 3px;
+  background-color: var(--el-color-primary);
+  color: white;
+}
+
+.shop-cart-btn {
+  width: 120px;
+  height: 40px;
+  border-radius: 8px;
 }
 </style>
