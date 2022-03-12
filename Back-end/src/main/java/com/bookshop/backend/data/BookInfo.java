@@ -1,27 +1,28 @@
 package com.bookshop.backend.data;
 
+import lombok.*;
+
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@RequiredArgsConstructor
 public class BookInfo {
-    private int id;
-    private String name;
 
-    public BookInfo(int id, String name) {
-        this.id = id;
-        this.name = name;
-    }
+    @NonNull
+    private Integer id;
 
-    public int getId() {
-        return id;
-    }
+    private String name = null;
+    private String author = null;
+    private String date = null;
+    private String publisher = null;
+    private Double price = null;
+    private Boolean hasEBook = false;
+    private Boolean hasSecondhandBook = false;
+    private String bookIntroduction = null;
+    private String authorIntroduction = null;
+    private String directory = null;
+    private String pic = null;
+    private String isbn = null;
 
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
 }
