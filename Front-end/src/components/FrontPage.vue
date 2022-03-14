@@ -18,13 +18,13 @@
     <el-space>
       <SideBoard></SideBoard>
     </el-space>
-    <el-space direction="vertical">
-      <BriefCard title="新品推荐" class="rounded-border"></BriefCard>
-      <BriefCard title="店铺推荐" class="rounded-border"></BriefCard>
+    <el-space direction="vertical" :size="20">
+      <BriefCard title="新品推荐" class="rounded-border" type="product"></BriefCard>
+      <BriefCard title="店铺推荐" class="rounded-border" type="shops"></BriefCard>
     </el-space>
-    <el-space direction="vertical">
-      <BriefCard title="书评分享" class="rounded-border"></BriefCard>
-      <BriefCard title="最新咨询" class="rounded-border"></BriefCard>
+    <el-space direction="vertical" :size="20">
+      <BriefCard title="书评分享" class="rounded-border" type="review"></BriefCard>
+      <BriefCard title="最新咨询" class="rounded-border" type="news"></BriefCard>
     </el-space>
   </el-space>
 </template>

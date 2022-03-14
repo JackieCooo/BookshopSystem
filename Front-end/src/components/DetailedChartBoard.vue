@@ -3,8 +3,8 @@
     <el-card :body-style="{ padding: '0px' }" shadow="hover">
       <el-row justify="space-between">
         <div class="container">
-          <el-image :src="info.firstBookInfo.picSrc" fit="cover" class="chart-cover"></el-image>
-          <div><h1 class="chart-title">{{info.title}}</h1></div>
+          <el-image :src="info.coverUrl" fit="cover" class="chart-cover"></el-image>
+          <div><h1 class="chart-title">{{title}}</h1></div>
           <div><p class="subtitle">查看全部 ></p></div>
         </div>
         <el-space direction="vertical" :size="0">
@@ -12,28 +12,28 @@
             <template #title>
               <el-space>
                 <div :style="{color: 'red'}">1</div>
-                <RankChangeIcon :change="rankStatus(info.firstBookInfo.id, info.firstBookInfo.lastRank)"></RankChangeIcon>
-                <div>《{{info.firstBookInfo.name}}》</div>
+<!--                <RankChangeIcon :change="rankStatus(info.firstBookInfo.id, info.firstBookInfo.lastRank)"></RankChangeIcon>-->
+                <div>《{{info.chart[0].name}}》</div>
               </el-space>
             </template>
-            <el-descriptions-item label="作者">{{info.firstBookInfo.author}}</el-descriptions-item>
-            <el-descriptions-item label="出版时间">{{info.firstBookInfo.time}}</el-descriptions-item>
-            <el-descriptions-item label="出版社">{{info.firstBookInfo.publisher}}</el-descriptions-item>
-            <el-descriptions-item label="价格">{{info.firstBookInfo.price}}元</el-descriptions-item>
-            <el-descriptions-item v-if="info.firstBookInfo.hasEBook || info.firstBookInfo.hasSecondhandBook">
+            <el-descriptions-item label="作者">{{info.chart[0].author}}</el-descriptions-item>
+            <el-descriptions-item label="出版时间">{{info.date}}</el-descriptions-item>
+            <el-descriptions-item label="出版社">{{info.publisher}}</el-descriptions-item>
+            <el-descriptions-item label="价格">{{info.price}}元</el-descriptions-item>
+            <el-descriptions-item v-if="info.hasEBook || info.hasSecondhandBook">
               <el-space>
-                <el-tag v-if="info.firstBookInfo.hasEBook" effect="dark">电子书</el-tag>
-                <el-tag v-if="info.firstBookInfo.hasSecondhandBook" effect="dark">二手书</el-tag>
+                <el-tag v-if="info.hasEBook" effect="dark">电子书</el-tag>
+                <el-tag v-if="info.hasSecondhandBook" effect="dark">二手书</el-tag>
               </el-space>
             </el-descriptions-item>
           </el-descriptions>
           <el-menu>
-            <el-menu-item v-for="i in info.bookInfo" :key="i">
+            <el-menu-item v-for="i in num" :key="i">
               <el-space>
-                <div :style="{'color': i.id === 2 ? 'orangered' : (i.id === 3 ? 'orange' : '')}">{{i.id}}</div>
-                <RankChangeIcon :change="rankStatus(i.id, i.lastRank)"></RankChangeIcon>
-                <div>《{{i.name}}》</div>
-                <div :style="{color: '#606266'}">{{i.author}}</div>
+                <div :style="{'color': i === 2 ? 'orangered' : (i === 3 ? 'orange' : '')}">{{i}}</div>
+<!--                <RankChangeIcon :change="rankStatus(i.id, i.lastRank)"></RankChangeIcon>-->
+                <div>《{{info.chart[i].name}}》</div>
+                <div :style="{color: '#606266'}">{{info.chart[i].author}}</div>
               </el-space>
             </el-menu-item>
           </el-menu>
@@ -44,37 +44,43 @@
 </template>
 
 <script>
-import RankChangeIcon from "@/components/RankChangeIcon";
 
 export default {
   name: "DetailedChartBoard",
   components: {
-    RankChangeIcon,
+  },
+  data() {
+    return {
+      num: [1, 2, 3, 4],
+      info: {
+        chart: [
+          {id: 0, name: '', author: ''},
+          {id: 0, name: '', author: ''},
+          {id: 0, name: '', author: ''},
+          {id: 0, name: '', author: ''},
+          {id: 0, name: '', author: ''},
+        ],
+        coverUrl: '',
+        date: '',
+        publisher: '',
+        price: 0,
+        hasEBook: false,
+        hasSecondhandBook: false
+      },
+    }
   },
   props: {
-    info: {
-      title: String,
-      firstBookInfo: {
-        id: Number,
-        lastRank: Number,
-        name: String,
-        author: String,
-        picSrc: String,
-        time: String,
-        publisher: String,
-        price: Number,
-        hasEBook: Boolean,
-        hasSecondhandBook: Boolean,
-      },
-      bookInfo: [
-        {
-          id: Number,
-          lastRank: Number,
-          name: String,
-          author: String,
-        }
-      ]
-    }
+    title: String,
+    type: String,
+  },
+  async created() {
+    await this.$http.get('/api/board/' + this.type)
+    .then((res) => {
+      this.info = res.data.data
+    })
+    .catch((err) => {
+      console.log(err)
+    })
   },
   methods: {
     rankStatus(now, pre) {
@@ -84,7 +90,7 @@ export default {
       else if (val < 0) return 'down'
       else if (val === 0) return 'none'
     }
-  }
+  },
 }
 </script>
 

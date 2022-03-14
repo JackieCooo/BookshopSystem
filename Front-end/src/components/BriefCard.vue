@@ -3,7 +3,7 @@
     <template #header>
       <el-row justify="space-between" class="card-header" :body-style="{ padding: '0px' }">
         <el-col :span="5"><b>{{title}}</b></el-col>
-        <el-col :span="2"><el-button circle :icon="ArrowRight" class="card-btn"></el-button></el-col>
+        <el-col :span="2"><el-button circle :icon="ArrowRight" class="card-btn" @click="gotoPage"></el-button></el-col>
       </el-row>
     </template>
     <el-carousel :autoplay="false" height="150px" arrow="never">
@@ -27,7 +27,27 @@
 export default {
   name: "BriefCard",
   props: {
-    title: String
+    title: String,
+    type: String,
+  },
+  methods: {
+    gotoPage() {
+      switch (this.type) {
+        case 'product':
+          this.$router.replace('/latest')
+          break
+        case 'review':
+          this.$router.replace('/recommend')
+          break
+        case 'news':
+          // this.$router.replace('/latest')
+          break
+        case 'shops':
+          // this.$router.replace('/latest')
+          break
+        default: break
+      }
+    }
   }
 }
 </script>

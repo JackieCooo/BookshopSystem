@@ -3,8 +3,11 @@ import App from './App.vue'
 import ElementPlus from 'element-plus'
 import router from "./router";
 import 'element-plus/dist/index.css'
+import axios from "axios";
 
 const app = createApp(App)
+axios.defaults.baseURL = 'http://localhost:8081'
+app.config.globalProperties.$http = axios;
 
 app.use(ElementPlus)
 app.use(router)

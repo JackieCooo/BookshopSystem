@@ -21,13 +21,9 @@ export default {
   data() {
     return {
       thisPage: 1,
+
     }
   },
-/*
-  created() {
-    this.$router.replace('/')
-  },
-*/
   methods: {
     gotoPage(name) {
       switch (name) {
@@ -52,7 +48,11 @@ export default {
           this.thisPage = 5
           break
       }
-    }
+    },
+    async getAllChartInfo() {  // 获取总榜信息
+      const {data: allChart} = await this.$http.get("/api/chart/all")
+      console.log(allChart)
+    },
   }
 }
 </script>

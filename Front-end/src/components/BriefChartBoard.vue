@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <el-image :src="src" fit="cover" class="chart-cover"></el-image>
+    <el-image :src="picUrl" fit="cover" class="chart-cover"></el-image>
     <div><h1 class="chart-title">{{title}}</h1></div>
     <div><p class="subtitle">查看更多 ></p></div>
   </div>
@@ -9,10 +9,24 @@
 <script>
 export default {
   name: "BriefChartBoard",
+  data() {
+    return {
+      picUrl: '',
+    }
+  },
   props: {
     title: String,
-    src: String,
-  }
+    type: String,
+  },
+  async created() {
+    await this.$http.get('/api/chart/' + this.type + '/?detailed=0')
+    .then((res) => {
+      this.picUrl = res.data.data.coverUrl
+    })
+    .catch((err) => {
+      console.log(err)
+    })
+  },
 }
 </script>
 

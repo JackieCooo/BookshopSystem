@@ -5,7 +5,6 @@ import lombok.*;
 @Getter
 @Setter
 @NoArgsConstructor
-@AllArgsConstructor
 @RequiredArgsConstructor
 public class BookInfo {
 
