@@ -7,6 +7,13 @@ import LatestBookPage from "@/components/LatestBookPage";
 import HottestSellersPage from "@/components/HottestSellersPage";
 import ChartBoard from "@/components/ChartBoard";
 import ProductPage from "@/components/ProductPage";
+import MemberPage from "@/components/MemberPage";
+import AccountCenterPage from "@/components/AccountCenterPage";
+import AccountInfoPage from "@/components/AccountInfoPage";
+import PasswordChangingPage from "@/components/PasswordChangingPage";
+import AddressPage from "@/components/AddressPage";
+import CollectionPage from "@/components/CollectionPage";
+import OrderPage from "@/components/OrderPage";
 
 const StyleChartBoard = {
     template: '<ChartBoard :type="$route.params.type"></ChartBoard>',
@@ -18,7 +25,7 @@ const StyleChartBoard = {
 const routes = [
     {
         path: '/',
-        redirect: '/home'
+        redirect: '/member'
     },
     {
         path: '/home',
@@ -47,6 +54,19 @@ const routes = [
     {
       path: '/book/:id',
       component: ProductPage,
+    },
+    {
+        path: '/member',
+        redirect: '/member/home',
+        component: MemberPage,
+        children: [
+            {path: 'home', component: AccountCenterPage},
+            {path: 'account', component: AccountInfoPage},
+            {path: 'password', component: PasswordChangingPage},
+            {path: 'address', component: AddressPage},
+            {path: 'collection', component: CollectionPage},
+            {path: 'order', component: OrderPage},
+        ]
     },
 ]
 

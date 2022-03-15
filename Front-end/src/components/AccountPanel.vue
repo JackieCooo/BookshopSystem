@@ -24,8 +24,8 @@
         <el-space :size="10">
           <el-button round class="rounded-button">
             <el-space direction="vertical" :size="0">
-              <el-icon :size="30" color="#409eff"><shop /></el-icon>
-              <p>收藏店铺</p>
+              <el-icon :size="30" color="#409eff"><user-filled /></el-icon>
+              <p>会员中心</p>
             </el-space>
           </el-button>
           <el-button round class="rounded-button">
@@ -44,28 +44,64 @@
         <p>Hi, 你好</p>
         <el-avatar :size="50" fit="fill" shape="circle" :icon="Avatar"></el-avatar>
       </div>
-      <el-button round class="normal-btn">登录</el-button>
-      <el-button round class="normal-btn">注册</el-button>
+      <el-button round class="normal-btn" @click="showLoginPage = true">登录</el-button>
+
+      <el-dialog v-model="showLoginPage" :destroy-on-close="true" :width="400" top="200px" class="login-dialog">
+        <el-space direction="vertical">
+          <h1 class="login-title">欢迎登录</h1>
+          <el-input placeholder="输入用户名" v-model="username" :prefix-icon="Avatar" class="input-box"></el-input>
+          <el-input placeholder="输入密码" v-model="password" :show-password="true" :prefix-icon="Lock" class="input-box"></el-input>
+          <el-space :size="30">
+            <el-checkbox v-model="rememberPassword" label="记住密码" size="large"></el-checkbox>
+            <el-checkbox v-model="autoLogin" label="自动登录" size="large"></el-checkbox>
+          </el-space>
+          <el-button round type="primary" class="login-btn">登录</el-button>
+        </el-space>
+      </el-dialog>
+
+      <el-button round class="normal-btn" @click="showRegisterPage = true">注册</el-button>
+
+      <el-dialog v-model="showRegisterPage" :destroy-on-close="true" :width="400" top="200px" class="login-dialog">
+        <el-space direction="vertical">
+          <h1 class="login-title">用户注册</h1>
+          <el-input placeholder="输入用户名" v-model="username" :prefix-icon="Avatar" class="input-box"></el-input>
+          <el-input placeholder="输入密码" v-model="password" :show-password="true" :prefix-icon="Lock" class="input-box"></el-input>
+          <el-input placeholder="确认密码" v-model="confirmPassword" :show-password="true" :prefix-icon="Lock" class="input-box"></el-input>
+          <el-button round type="primary" class="login-btn">注册</el-button>
+        </el-space>
+      </el-dialog>
+
     </el-space>
   </div>
 </template>
 
 <script setup>
-import {Avatar, SwitchButton, Tickets, Star, Shop, Clock} from "@element-plus/icons-vue";
+import {Avatar, SwitchButton, Tickets, Star, UserFilled, Clock, Lock} from "@element-plus/icons-vue";
 import {h} from 'vue'
 import {ElDivider} from 'element-plus'
 
-const isLogin = false;
 const spacer = h(ElDivider, {direction: 'horizontal'})
 </script>
 
 <script>
 export default {
-  name: "AccountPanel"
+  name: "AccountPanel",
+  data() {
+    return {
+      isLogin: true,
+      showLoginPage: false,
+      showRegisterPage: false,
+      rememberPassword: false,
+      autoLogin: false,
+      username: '',
+      password: '',
+      confirmPassword: ''
+    }
+  }
 }
 </script>
 
-<style scoped>
+<style lang="less" scoped>
 .rounded-button {
   height: 80px;
   width: 80px;
@@ -73,5 +109,27 @@ export default {
 
 .normal-btn {
   width: 150px;
+}
+
+.login-dialog {
+  border-radius: 50px;
+}
+
+.el-input {
+  width: 250px;
+  margin-bottom: 10px;
+}
+
+:deep(.el-input__inner) {
+  border-radius: 20px;
+}
+
+.login-title {
+  font-size: 25px;
+}
+
+.login-btn {
+  width: 250px;
+  font-weight: bold;
 }
 </style>

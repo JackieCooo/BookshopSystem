@@ -64,8 +64,7 @@ const picUrl = [
 
 .side-bar {
   height: 420px;
-  border: none;
-  background-color: #EBEEF5;
+  border: 1px solid #E4E7ED;
 }
 
 .el-row {

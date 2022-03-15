@@ -15,13 +15,18 @@
           <el-icon class="el-icon--right"><ArrowDownBold /></el-icon>
         </el-button>
         <template #dropdown>
-          <el-dropdown-menu>
-            <el-dropdown-item>Action 1</el-dropdown-item>
-            <el-dropdown-item>Action 2</el-dropdown-item>
-            <el-dropdown-item>Action 3</el-dropdown-item>
-            <el-dropdown-item>Action 4</el-dropdown-item>
-            <el-dropdown-item>Action 5</el-dropdown-item>
-          </el-dropdown-menu>
+          <div v-if="isCartEmpty" class="empty-cart">
+            <el-empty description="购物车为空" :image-size="100"></el-empty>
+          </div>
+          <div v-else>
+            <el-dropdown-menu>
+              <el-dropdown-item>Action 1</el-dropdown-item>
+              <el-dropdown-item>Action 2</el-dropdown-item>
+              <el-dropdown-item>Action 3</el-dropdown-item>
+              <el-dropdown-item>Action 4</el-dropdown-item>
+              <el-dropdown-item>Action 5</el-dropdown-item>
+            </el-dropdown-menu>
+          </div>
         </template>
       </el-dropdown>
     </el-col>
@@ -35,7 +40,8 @@ export default {
   name: "SearchPanel",
   data() {
     return {
-      input : ''
+      input : '',
+      isCartEmpty: true,
     }
   },
   components: {
@@ -77,5 +83,10 @@ export default {
   width: 120px;
   height: 40px;
   border-radius: 8px;
+}
+
+.empty-cart {
+  width: 300px;
+  height: 250px;
 }
 </style>
