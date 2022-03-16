@@ -25,7 +25,7 @@ const StyleChartBoard = {
 const routes = [
     {
         path: '/',
-        redirect: '/member'
+        redirect: '/home'
     },
     {
         path: '/home',

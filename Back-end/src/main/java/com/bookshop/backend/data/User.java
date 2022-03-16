@@ -1,12 +1,10 @@
 package com.bookshop.backend.data;
 
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
-@Getter
-@Setter
 @NoArgsConstructor
+@Data
 public class User {
     private Integer id;
     private String name;
@@ -14,4 +12,5 @@ public class User {
     private String mail;
     private String gender;
     private String password;
+    private byte[] pic;
 }
