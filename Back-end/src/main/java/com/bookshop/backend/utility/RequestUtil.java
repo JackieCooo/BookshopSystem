@@ -1,6 +1,6 @@
-package com.bookshop.backend;
+package com.bookshop.backend.utility;
 
-import com.bookshop.backend.data.ChartInfo;
+import com.bookshop.backend.data.Chart;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -25,10 +25,10 @@ public class RequestUtil {
         // 1.生成httpclient，相当于该打开一个浏览器
         CloseableHttpClient httpClient = HttpClients.createDefault();
         // 设置请求和传输超时时间
-        RequestConfig requestConfig = RequestConfig.custom().setSocketTimeout(2000).setConnectTimeout(2000).build();
+        RequestConfig requestConfig = RequestConfig.custom().setSocketTimeout(5000).setConnectTimeout(5000).build();
         CloseableHttpResponse response = null;
         Document html = null;
-        ChartInfo info = new ChartInfo();
+        Chart info = new Chart();
 
         // 2.创建get请求，相当于在浏览器地址栏输入 网址
         HttpGet request = new HttpGet(url);
@@ -64,6 +64,49 @@ public class RequestUtil {
             HttpClientUtils.closeQuietly(httpClient);
         }
         return null;
+    }
+
+    public static byte[] requestPic(String url) {
+        System.out.println(url);
+
+        // 1.生成httpclient，相当于该打开一个浏览器
+        CloseableHttpClient httpClient = HttpClients.createDefault();
+        // 设置请求和传输超时时间
+        RequestConfig requestConfig = RequestConfig.custom().setSocketTimeout(5000).setConnectTimeout(5000).build();
+        CloseableHttpResponse response = null;
+
+        // 2.创建get请求，相当于在浏览器地址栏输入 网址
+        HttpGet request = new HttpGet(url);
+        try {
+            request.setHeader("User-Agent", USER_AGENT);
+            request.setConfig(requestConfig);
+
+            // 3.执行get请求，相当于在输入地址栏后敲回车键
+            response = httpClient.execute(request);
+
+            // 4.判断响应状态为200，进行处理
+            if (response.getStatusLine().getStatusCode() == HttpStatus.OK.value()) {
+                System.out.println("请求成功");
+
+                // 5.获取响应内容
+                return EntityUtils.toByteArray(response.getEntity());
+            }
+            else {
+                // 如果返回状态不是200，比如404（页面不存在）等，根据情况做处理，这里略
+                System.out.println("请求失败");
+                System.out.println(EntityUtils.toString(response.getEntity(), "utf-8"));
+            }
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+        finally {
+            // 6.关闭
+            HttpClientUtils.closeQuietly(response);
+            HttpClientUtils.closeQuietly(httpClient);
+        }
+        return null;
+
     }
 
 }

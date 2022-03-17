@@ -1,7 +1,7 @@
 package com.bookshop.backend.controller;
 
-import com.bookshop.backend.RequestUtil;
-import com.bookshop.backend.data.ReviewInfo;
+import com.bookshop.backend.utility.RequestUtil;
+import com.bookshop.backend.data.Review;
 import com.bookshop.backend.data.ReviewListInfo;
 import com.bookshop.backend.jsonconvert.JsonResult;
 import org.jsoup.nodes.Document;
@@ -45,7 +45,7 @@ public class ReviewController {
         return new JsonResult<>("1", "请求失败");
     }
 
-    private void extractReviewInfo(Document doc, ReviewInfo info) {
+    private void extractReviewInfo(Document doc, Review info) {
         Elements elements = doc.select("div.review-content > p, div.review-content > div > div > img");
         System.out.println(elements.html());
     }
@@ -54,10 +54,10 @@ public class ReviewController {
         Elements elements = doc.select("div.review-item");
         for (Element i : elements) {
             Element element = null;
-            ReviewInfo reviewInfo = new ReviewInfo();
+            Review review = new Review();
 
             // 获取书评号
-            reviewInfo.setId(Integer.parseInt(i.attr("id")));
+            review.setId(Integer.parseInt(i.attr("id")));
             System.out.println("id: " + i.attr("id"));
 
             // 获取书号
@@ -67,35 +67,35 @@ public class ReviewController {
             Pattern bookPattern = Pattern.compile("\\d{8}");
             Matcher matcher = bookPattern.matcher(tmp);
             if (matcher.find()) {
-                reviewInfo.setBookId(Integer.parseInt(matcher.group(0)));
+                review.setBookId(Integer.parseInt(matcher.group(0)));
                 System.out.println("book id: " + matcher.group(0));
             }
 
             // 获取题目
             element = i.select("div.main-bd > h2 > a").first();
             assert element != null;
-            reviewInfo.setTitle(element.text());
+            review.setTitle(element.text());
             System.out.println("title: " + element.text());
 
             // 获取作者名
             element = i.select("header.main-hd > a.name").first();
             assert element != null;
-            reviewInfo.setAuthor(element.text());
+            review.setAuthor(element.text());
             System.out.println("author: " + element.text());
 
             // 获取发布时间
             element = i.select("header.main-hd > span.main-meta").first();
             assert element != null;
-            reviewInfo.setDate(element.text());
+            review.setDate(element.text());
             System.out.println("date: " + element.text());
 
             // 获取内容
             element = i.select("div.short-content").first();
             assert element != null;
-            reviewInfo.setContent(element.text());
+            review.setContent(element.text());
             System.out.println("content: " + element.text());
 
-            info.getList().add(reviewInfo);
+            info.getList().add(review);
         }
     }
 

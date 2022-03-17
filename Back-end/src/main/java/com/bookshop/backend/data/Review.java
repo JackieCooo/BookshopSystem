@@ -7,7 +7,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class ReviewInfo {
+public class Review {
     private Integer bookId = 0;
     private Integer id = 0;
     private String title = null;

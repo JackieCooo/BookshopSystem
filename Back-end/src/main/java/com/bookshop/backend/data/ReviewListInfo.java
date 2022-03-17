@@ -10,5 +10,5 @@ import java.util.ArrayList;
 @Setter
 @NoArgsConstructor
 public class ReviewListInfo {
-    private ArrayList<ReviewInfo> list = new ArrayList<>();
+    private ArrayList<Review> list = new ArrayList<>();
 }

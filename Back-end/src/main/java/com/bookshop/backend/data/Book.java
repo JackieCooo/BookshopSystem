@@ -6,7 +6,7 @@ import lombok.*;
 @Setter
 @NoArgsConstructor
 @RequiredArgsConstructor
-public class BookInfo {
+public class Book {
 
     @NonNull
     private Integer id;
@@ -21,7 +21,7 @@ public class BookInfo {
     private String bookIntroduction = null;
     private String authorIntroduction = null;
     private String directory = null;
-    private String pic = null;
+    private byte[] pic = null;
     private String isbn = null;
 
 }
