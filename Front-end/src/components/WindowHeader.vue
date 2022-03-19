@@ -2,8 +2,8 @@
   <div>
     <el-row justify="space-between">
       <el-space spacer="|" :size="15">
-        <el-button type="text" @click="gotoPage('/front')">首页</el-button>
-        <el-button type="text" @click="gotoPage('/recommend')">精选书评</el-button>
+        <el-button type="text" @click="gotoPage('/home')">首页</el-button>
+        <el-button type="text" @click="gotoPage('/review')">精选书评</el-button>
         <el-button type="text" @click="gotoPage('/chart')">排行榜</el-button>
         <el-button type="text" @click="gotoPage('/latest')">新品上架</el-button>
         <el-button type="text" @click="gotoPage('/hottest')">畅销推荐</el-button>

@@ -1,9 +1,9 @@
 <template>
-  <div v-if="isDataOk">
+  <div v-if="info != null">
     <el-space direction="vertical" alignment="start" :size="0">
       <h1 class="title">{{info.name}}</h1>
       <el-space alignment="start" size="large">
-        <el-image :src="info.pic" fit="contain"></el-image>
+        <el-image :src="loadPic(info.id)" fit="contain"></el-image>
         <el-space direction="vertical" alignment="start" class="description" size="large">
           <div><span class="gray-text">作者: </span>{{info.author}}</div>
           <div><span class="gray-text">出版社: </span>{{info.publisher}}</div>
@@ -20,11 +20,11 @@
           <el-option label="电子书" :value="3" :disabled="!info.hasEBook"></el-option>
         </el-select>
         <span class="gray-text">选择数量: </span>
-        <el-input-number v-model="bookNum" :min="1"></el-input-number>
+        <el-input-number v-model="quantity" :min="1"></el-input-number>
       </el-space>
       <el-space class="purchase-bar">
         <div class="price-text">¥ {{getPrice}}</div>
-        <el-button type="warning" class="purchase-btn"><h3>加入购物车</h3></el-button>
+        <el-button type="warning" class="purchase-btn" @click="addToCart"><h3>加入购物车</h3></el-button>
         <el-button type="danger"  class="purchase-btn"><h3>立即购买</h3></el-button>
       </el-space>
       <el-collapse v-model="collapseNum" class="collapse-box">
@@ -62,23 +62,44 @@ export default {
   name: "ProductPage",
   data() {
     return {
-      isDataOk: false,
       bookType: '全新整书',
-      bookNum: 1,
+      quantity: 1,
       info: null,
     }
   },
   methods: {
+    // 加载封面图
+    loadPic(id) {
+      return "http://localhost:8001/api/book/pic/" + id.toString()
+    },
+    // 加入购物车
+    async addToCart() {
+      await this.$http({
+        method: 'post',
+        url: 'user/cart',
+        data: {
+          bookId: this.info.id,
+          userId: this.$store.state.user.userId,
+          quantity: this.quantity
+        }
+      })
+      .then((res) => {
+        console.log(res.data)
+      })
+      .catch((err) => {
+        console.log(err)
+      })
+    },
   },
   computed: {
     getPrice() {
       switch (this.bookType) {
         case '全新整书':
-          return this.bookNum * this.info.price
+          return this.quantity * this.info.price
         case '二手书':
-          return this.bookNum * this.info.price
+          return this.quantity * this.info.price
         case '电子书':
-          return this.bookNum * this.info.price
+          return this.quantity * this.info.price
         default: return 0
       }
     }

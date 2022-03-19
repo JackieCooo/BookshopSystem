@@ -21,18 +21,17 @@ export default {
   data() {
     return {
       thisPage: 1,
-
     }
   },
   methods: {
     gotoPage(name) {
       switch (name) {
         case 1:
-          this.$router.push('/')
+          this.$router.push('/home')
             this.thisPage = 1
           break
         case 2:
-          this.$router.push('/recommend')
+          this.$router.push('/review')
           this.thisPage = 2
           break
         case 3:
@@ -48,10 +47,6 @@ export default {
           this.thisPage = 5
           break
       }
-    },
-    async getAllChartInfo() {  // 获取总榜信息
-      const {data: allChart} = await this.$http.get("/api/chart/all")
-      console.log(allChart)
     },
   }
 }

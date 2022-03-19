@@ -1,6 +1,6 @@
 <template>
-  <div class="container">
-    <el-image :src="picUrl" fit="cover" class="chart-cover"></el-image>
+  <div class="container" v-if="info != null">
+    <el-image :src="loadPic(info[0].id)" fit="cover" class="chart-cover"></el-image>
     <div><h1 class="chart-title">{{title}}</h1></div>
     <div><p class="subtitle">查看更多 ></p></div>
   </div>
@@ -11,7 +11,7 @@ export default {
   name: "BriefChartBoard",
   data() {
     return {
-      picUrl: '',
+      info: null,
     }
   },
   props: {
@@ -19,14 +19,19 @@ export default {
     type: String,
   },
   async created() {
-    await this.$http.get('/api/chart/' + this.type + '/?detailed=0')
+    await this.$http.get('/api/chart/' + this.type + '?detail=4&num=1')
     .then((res) => {
-      this.picUrl = res.data.data.coverUrl
+      this.info = res.data.data
     })
     .catch((err) => {
       console.log(err)
     })
   },
+  methods: {
+    loadPic(id) {
+      return "http://localhost:8001/api/book/pic/" + id.toString()
+    }
+  }
 }
 </script>
 

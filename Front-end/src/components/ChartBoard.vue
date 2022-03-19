@@ -1,21 +1,21 @@
 <template>
   <div v-if="info != null">
     <el-space direction="vertical" :spacer="spacer">
-      <el-space v-for="i in info" :key="i" class="chart-box" alignment="start">
-        <el-tag type="success">{{i.id}}</el-tag>
-        <el-image :src="i.pic" fit="fill" class="img-box"></el-image>
+      <el-space v-for="i in 10" :key="i" class="chart-box" alignment="start">
+        <el-tag type="success">{{i}}</el-tag>
+        <el-image :src="loadPic(info[i-1].id)" fit="fill" class="img-box"></el-image>
         <el-descriptions>
           <template #title>
-            <div @click="loadProductPage(i.id)">《{{i.name}}》</div>
+            <div @click="loadProductPage(info[i-1].id)">《{{info[i-1].name}}》</div>
           </template>
-          <el-descriptions-item label="作者">{{i.author}}</el-descriptions-item>
-          <el-descriptions-item label="出版时间">{{i.date}}</el-descriptions-item>
-          <el-descriptions-item label="出版社">{{i.publisher}}</el-descriptions-item>
-          <el-descriptions-item label="价格">{{i.price}}元</el-descriptions-item>
-          <el-descriptions-item v-if="i.hasEBook || i.hasSecondhandBook">
+          <el-descriptions-item label="作者">{{info[i-1].author}}</el-descriptions-item>
+          <el-descriptions-item label="出版时间">{{info[i-1].date}}</el-descriptions-item>
+          <el-descriptions-item label="出版社">{{info[i-1].publisher}}</el-descriptions-item>
+          <el-descriptions-item label="价格">{{info[i-1].price}}元</el-descriptions-item>
+          <el-descriptions-item v-if="info[i-1].hasEBook || info[i-1].hasSecondhandBook">
             <el-space>
-              <el-button v-if="i.hasEBook" type="primary" plain>电子书</el-button>
-              <el-button v-if="i.hasSecondhandBook" type="primary" plain>二手书</el-button>
+              <el-button v-if="info[i-1].hasEBook" type="primary" plain>电子书</el-button>
+              <el-button v-if="info[i-1].hasSecondhandBook" type="primary" plain>二手书</el-button>
             </el-space>
           </el-descriptions-item>
         </el-descriptions>
@@ -46,19 +46,20 @@ export default {
     console.log(this.type + '组件创建')
     await this.$http.get('/api/chart/' + this.type)
     .then((res) => {
-      this.info = res.data.data.chart
+      this.info = res.data.data
       console.log(this.info)
     })
     .catch((err) => {
       console.log(err)
     })
   },
-  watch: {  // 用户切换tab时重新请求数据
+  watch: {
+    // 用户切换tab时重新请求数据
     type: async function (val, oldVal) {
       console.log(val, oldVal)
       await this.$http.get('/api/chart/' + this.type)
       .then((res) => {
-        this.info = res.data.data.chart
+        this.info = res.data.data
         console.log(this.info)
       })
       .catch((err) => {
@@ -67,10 +68,15 @@ export default {
     }
   },
   methods: {
+    // 跳转到图书详情页
     loadProductPage(id) {
       this.$router.replace('/book/' + id.toString())
+    },
+    // 加载封面图
+    loadPic(id) {
+      return "http://localhost:8001/api/book/pic/" + id.toString()
     }
-  }
+  },
 }
 </script>
 

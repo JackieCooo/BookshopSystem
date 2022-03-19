@@ -102,9 +102,11 @@ export default {
     async login() {
       await this.$http.get('/user/login?username=' + this.username + '&password=' + this.password)
       .then((res) => {
-        console.log(res.data.code, typeof res.data.code)
+        const user = res.data.data
+        console.log(user)
         if (res.data.code === '0') {  // 登录成功
           this.$store.commit('changeLoginState')
+          this.$store.commit('storeUserInfo', user)
           this.showLoginPage = false
         }
       })

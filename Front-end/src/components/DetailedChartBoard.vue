@@ -1,9 +1,9 @@
 <template>
-  <div class="box-style">
+  <div class="box-style" v-if="info != null && firstBook != null">
     <el-card :body-style="{ padding: '0px' }" shadow="hover">
       <el-row justify="space-between">
         <div class="container">
-          <el-image :src="info.coverUrl" fit="cover" class="chart-cover"></el-image>
+          <el-image :src="loadPic(firstBook[0].id)" fit="cover" class="chart-cover"></el-image>
           <div><h1 class="chart-title">{{title}}</h1></div>
           <div><p class="subtitle">查看全部 ></p></div>
         </div>
@@ -13,27 +13,27 @@
               <el-space>
                 <div :style="{color: 'red'}">1</div>
 <!--                <RankChangeIcon :change="rankStatus(info.firstBookInfo.id, info.firstBookInfo.lastRank)"></RankChangeIcon>-->
-                <div>《{{info.chart[0].name}}》</div>
+                <div>《{{firstBook[0].name}}》</div>
               </el-space>
             </template>
-            <el-descriptions-item label="作者">{{info.chart[0].author}}</el-descriptions-item>
-            <el-descriptions-item label="出版时间">{{info.date}}</el-descriptions-item>
-            <el-descriptions-item label="出版社">{{info.publisher}}</el-descriptions-item>
-            <el-descriptions-item label="价格">{{info.price}}元</el-descriptions-item>
-            <el-descriptions-item v-if="info.hasEBook || info.hasSecondhandBook">
+            <el-descriptions-item label="作者">{{firstBook[0].author}}</el-descriptions-item>
+            <el-descriptions-item label="出版时间">{{firstBook[0].date}}</el-descriptions-item>
+            <el-descriptions-item label="出版社">{{firstBook[0].publisher}}</el-descriptions-item>
+            <el-descriptions-item label="价格">{{firstBook[0].price}}元</el-descriptions-item>
+            <el-descriptions-item v-if="firstBook[0].hasEBook || firstBook[0].hasSecondhandBook">
               <el-space>
-                <el-tag v-if="info.hasEBook" effect="dark">电子书</el-tag>
-                <el-tag v-if="info.hasSecondhandBook" effect="dark">二手书</el-tag>
+                <el-tag v-if="firstBook[0].hasEBook" effect="dark">电子书</el-tag>
+                <el-tag v-if="firstBook[0].hasSecondhandBook" effect="dark">二手书</el-tag>
               </el-space>
             </el-descriptions-item>
           </el-descriptions>
           <el-menu>
-            <el-menu-item v-for="i in num" :key="i">
+            <el-menu-item v-for="i in 4" :key="i">
               <el-space>
-                <div :style="{'color': i === 2 ? 'orangered' : (i === 3 ? 'orange' : '')}">{{i}}</div>
+                <div :style="{'color': i+1 === 2 ? 'orangered' : (i+1 === 3 ? 'orange' : '')}">{{i+1}}</div>
 <!--                <RankChangeIcon :change="rankStatus(i.id, i.lastRank)"></RankChangeIcon>-->
-                <div>《{{info.chart[i].name}}》</div>
-                <div :style="{color: '#606266'}">{{info.chart[i].author}}</div>
+                <div>《{{info[i].name}}》</div>
+                <div :style="{color: '#606266'}">{{info[i].author}}</div>
               </el-space>
             </el-menu-item>
           </el-menu>
@@ -44,39 +44,34 @@
 </template>
 
 <script>
-
 export default {
   name: "DetailedChartBoard",
   components: {
   },
   data() {
     return {
-      num: [1, 2, 3, 4],
-      info: {
-        chart: [
-          {id: 0, name: '', author: ''},
-          {id: 0, name: '', author: ''},
-          {id: 0, name: '', author: ''},
-          {id: 0, name: '', author: ''},
-          {id: 0, name: '', author: ''},
-        ],
-        coverUrl: '',
-        date: '',
-        publisher: '',
-        price: 0,
-        hasEBook: false,
-        hasSecondhandBook: false
-      },
+      info: null,
+      firstBook: null,
     }
   },
   props: {
     title: String,
     type: String,
   },
+  // 组件创建时请求数据
   async created() {
-    await this.$http.get('/api/board/' + this.type)
+    await this.$http.get('/api/chart/' + this.type + '?detail=2&num=5')
     .then((res) => {
       this.info = res.data.data
+      console.log(this.info)
+    })
+    .catch((err) => {
+      console.log(err)
+    })
+    await this.$http.get('/api/chart/' + this.type + '?num=1')
+    .then((res) => {
+      this.firstBook = res.data.data
+      console.log(this.firstBook)
     })
     .catch((err) => {
       console.log(err)
@@ -89,7 +84,11 @@ export default {
       if (val > 0) return 'up'
       else if (val < 0) return 'down'
       else if (val === 0) return 'none'
-    }
+    },
+    // 加载封面图
+    loadPic(id) {
+      return "http://localhost:8001/api/book/pic/" + id.toString()
+    },
   },
 }
 </script>

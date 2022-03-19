@@ -2,7 +2,6 @@ package com.bookshop.backend.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.bookshop.backend.callback.UserServiceCb;
-import com.bookshop.backend.data.ShoppingCartInfo;
 import com.bookshop.backend.data.User;
 import com.bookshop.backend.jsonconvert.JsonResult;
 import com.bookshop.backend.mapper.UserMapper;
@@ -44,12 +43,7 @@ public class UserController {
             System.out.println(UserServiceCb.UserNotExist);
         }
 
-        return new JsonResult<>();
-    }
-
-    @GetMapping("/cart")
-    public JsonResult<ShoppingCartInfo> getShoppingCartInfo() {
-        return new JsonResult<>();
+        return new JsonResult<>("1", "请求失败");
     }
 
 }

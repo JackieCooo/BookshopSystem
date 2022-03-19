@@ -9,7 +9,6 @@ import store from './store'
 const app = createApp(App)
 axios.defaults.baseURL = 'http://localhost:8081'
 app.config.globalProperties.$http = axios;
-app.config.globalProperties.$isLogin = false;
 
 app.use(ElementPlus)
 app.use(router)

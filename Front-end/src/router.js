@@ -2,7 +2,7 @@ import {createRouter, createWebHashHistory} from "vue-router";
 
 import FrontPage from "@/components/FrontPage";
 import ChartPage from "@/components/ChartPage";
-import RecommendPage from "@/components/RecommendPage";
+import ReviewChartPage from "@/components/ReviewChartPage";
 import LatestBookPage from "@/components/LatestBookPage";
 import HottestSellersPage from "@/components/HottestSellersPage";
 import ChartBoard from "@/components/ChartBoard";
@@ -14,6 +14,7 @@ import PasswordChangingPage from "@/components/PasswordChangingPage";
 import AddressPage from "@/components/AddressPage";
 import CollectionPage from "@/components/CollectionPage";
 import OrderPage from "@/components/OrderPage";
+import ReviewPage from "@/components/ReviewPage";
 
 const StyleChartBoard = {
     template: '<ChartBoard :type="$route.params.type"></ChartBoard>',
@@ -29,15 +30,19 @@ const routes = [
     },
     {
         path: '/home',
-        component: FrontPage
+        component: FrontPage,
     },
     {
         path: '/chart',
-        component: ChartPage
+        component: ChartPage,
     },
     {
-        path: '/recommend',
-        component: RecommendPage
+        path: '/review',
+        component: ReviewChartPage,
+    },
+    {
+        path: '/review/:id',
+        component: ReviewPage,
     },
     {
         path: '/latest',

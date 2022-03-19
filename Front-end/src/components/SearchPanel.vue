@@ -60,13 +60,15 @@ export default {
 
 :deep(.el-input__inner) {
   border-color: var(--el-color-primary);
-  border-radius: 8px;
+  border-top-left-radius: 8px;
+  border-bottom-left-radius: 8px;
   border-width: 3px;
 }
 
 :deep(.el-input__inner:hover) {
   border-color: var(--el-color-primary);
-  border-radius: 8px;
+  border-top-left-radius: 8px;
+  border-bottom-left-radius: 8px;
   border-width: 3px;
 }
 

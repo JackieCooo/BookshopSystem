@@ -1,21 +1,18 @@
 package com.bookshop.backend.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.bookshop.backend.data.Chart;
+import com.bookshop.backend.data.ChartType;
 import com.bookshop.backend.mapper.BookMapper;
-import com.bookshop.backend.utility.BookUtil;
-import com.bookshop.backend.utility.RequestUtil;
+import com.bookshop.backend.mapper.ChartMapper;
+import com.bookshop.backend.mapper.ChartTypeMapper;
 import com.bookshop.backend.data.Book;
-import com.bookshop.backend.data.ChartBoardInfo;
 import com.bookshop.backend.jsonconvert.JsonResult;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api")
@@ -23,100 +20,84 @@ public class ChartController {
 
     @Autowired
     private BookMapper bookMapper;
-
-    @RequestMapping("/chart/{type}")
-    public JsonResult<ArrayList<Book>> getInfo(@PathVariable String type, @RequestParam(required = false) Integer detail) {
-
-        Document doc;
-
-        if (type.equals("new")) doc = RequestUtil.requestHtml("https://book.douban.com/latest?subcat=%E5%85%A8%E9%83%A8");
-        else doc = RequestUtil.requestHtml("https://book.douban.com/chart?subcat=" + type);
-
-        if (doc != null) {
-            ArrayList<Book> info = new ArrayList<>();
-            extractChartInfo(doc, info, detail);
-            return new JsonResult<>(info);
-        }
-        return new JsonResult<>("1", "请求失败");
-    }
+    @Autowired
+    private ChartMapper chartMapper;
+    @Autowired
+    private ChartTypeMapper chartTypeMapper;
 
     /**
-     * 从HTML文档中提取指定的榜单信息
-     * @param doc HTML文档
-     * @param info 榜单信息
-     * @param detail 返回信息的详细程度 1：榜单详情页 2：详细榜单面板 3：简介榜单面板 4：只显示名字的榜单
+     * 从数据库中提取榜单信息
+     * @param type 榜单类型
+     * @param detail 返回信息的详细程度
+     *               1：除图书简介、作者简介、目录、ISBN号的全部内容
+     *               2：只含书号、书名、作者名
+     *               3：只含书号、书名
+     *               4：只含书号
+     *               5：只含书号、书名、图书简介
+     * @param num 返回条数
+     *            默认值为-1，返回能找到的全部
      */
-    private void extractChartInfo(Document doc, ArrayList<Book> info, Integer detail) {
-        Element element;
-        Elements elements;
-        elements = doc.select("li.media");
-        boolean first = true;
+    @GetMapping("/chart/{type}")
+    public JsonResult<ArrayList<Book>> sendChartInfo(@PathVariable String type, @RequestParam(required = false, defaultValue = "1") Integer detail, @RequestParam(required = false, defaultValue = "-1") Integer num) {
 
-        // 获取每一本书的信息
-        for (Element i : elements) {
+        // 获取榜单类型
+        QueryWrapper<ChartType> chartTypeWrapper = new QueryWrapper<>();
+        chartTypeWrapper.eq("name", type);
+        Integer typeId = chartTypeMapper.selectOne(chartTypeWrapper).getId();
 
-            // 获取书号
-            Integer id;
-            element = i.select("div.media__body > h2 > a").first();
-            assert element != null;
-            String tmp = element.attr("href");
-            Pattern idPattern = Pattern.compile("\\d{8}");
-            Matcher matcher = idPattern.matcher(tmp);
-            if (matcher.find()) {
-                id = Integer.parseInt(matcher.group(0));
-                System.out.println("id: " + matcher.group(0));
+        // 获取榜单信息
+        QueryWrapper<Chart> chartWrapper = new QueryWrapper<>();
+        chartWrapper.eq("type_id", typeId).orderByAsc("rank_num");
+        List<Chart> charts = chartMapper.selectList(chartWrapper);
+
+        // 根据指定的详细程度获取对应书本的信息
+        if (num == -1 || num > charts.size()) num = charts.size();
+        ArrayList<Book> res = new ArrayList<>();
+        QueryWrapper<Book> bookWrapper = new QueryWrapper<>();
+        if (detail == 1) {
+            for (int i = 0; i < num; ++i) {
+                bookWrapper.select("id", "name", "author", "date", "publisher", "price", "has_e_book", "has_secondhand_book").eq("id", charts.get(i).getBookId());
+                Book book = bookMapper.selectOne(bookWrapper);
+                res.add(book);
+                bookWrapper.clear();
             }
-            else {
-                System.out.println("请求失败");
-                return;
-            }
-
-            // 是否有电子书
-            boolean hasEBook = false;
-            element = i.select("div.ebook-link").first();
-            if (element != null) {
-                hasEBook = true;
-                System.out.println("hasEBook: Yes");
-            }
-            else {
-                System.out.println("hasEBook: No");
-            }
-
-            // 查看数据库是否有这本书
-            QueryWrapper<Book> wrapper = new QueryWrapper<>();
-            wrapper.select("id").eq("id", id);
-            Long cnt = bookMapper.selectCount(wrapper);
-
-            // 数据库中没有对应的书，爬取
-            Book book = new Book(id);
-            if (cnt == 0) {
-                String url = "https://book.douban.com/subject/" + id;
-
-                doc = RequestUtil.requestHtml(url);
-
-                if (doc != null) {
-                    BookUtil.extractBookInfo(doc, book);
-                    book.setHasEBook(hasEBook);
-                    bookMapper.insert(book);  // 存到数据库
-                }
-                else {
-                    System.out.println("爬虫失败");
-                    return;
-                }
-
-            }
-
-            // 从数据库获取信息
-            wrapper.clear();
-            wrapper.select("id", "author", "name", "date", "publisher", "price", "has_e_book", "has_secondhand_book", "pic").eq("id", id);
-            Book res = bookMapper.selectOne(wrapper);
-            if (element != null) {  // 更新是否有电子书
-                res.setHasEBook(true);
-                bookMapper.updateById(res);
-            }
-
-            info.add(res);
-
         }
+        else if (detail == 2) {
+            for (int i = 0; i < num; ++i) {
+                bookWrapper.select("id", "name", "author").eq("id", charts.get(i).getBookId());
+                Book book = bookMapper.selectOne(bookWrapper);
+                res.add(book);
+                bookWrapper.clear();
+            }
+        }
+        else if (detail == 3) {
+            for (int i = 0; i < num; i++) {
+                bookWrapper.select("id", "name").eq("id", charts.get(i).getBookId());
+                Book book = bookMapper.selectOne(bookWrapper);
+                res.add(book);
+                bookWrapper.clear();
+            }
+        }
+        else if (detail == 4) {
+            for (int i = 0; i < num; i++) {
+                bookWrapper.select("id").eq("id", charts.get(i).getBookId());
+                Book book = bookMapper.selectOne(bookWrapper);
+                res.add(book);
+                bookWrapper.clear();
+            }
+        }
+        else if (detail == 5) {
+            for (int i = 0; i < num; i++) {
+                bookWrapper.select("id", "name", "book_introduction").eq("id", charts.get(i).getBookId());
+                Book book = bookMapper.selectOne(bookWrapper);
+                res.add(book);
+                bookWrapper.clear();
+            }
+        }
+        else {
+            return new JsonResult<>("1", "参数错误");
+        }
+
+        return new JsonResult<>(res);
     }
 }

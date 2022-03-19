@@ -1,16 +1,13 @@
 package com.bookshop.backend.data;
 
 import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Chart {
-    private Integer typeId;
-    private Integer bookId;
+public class ReviewChart {
+    private Integer reviewId;
     private Integer rankNum;
 }

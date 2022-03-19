@@ -37,7 +37,7 @@ public class BookUtil {
         }
 
         // 获取出版社名
-        Pattern publisherPattern = Pattern.compile("出版社\s*:\s(.*?)\s*(出品方|原作名|译者|出版年)");
+        Pattern publisherPattern = Pattern.compile("出版社\s*:\s(.*?)\s*(出品方|原作名|译者|出版年|副标题)");
         matcher = publisherPattern.matcher(infoText);
         if (matcher.find()) {
             info.setPublisher(matcher.group(1));
@@ -70,26 +70,29 @@ public class BookUtil {
 
         // 获取图书简介
         element = doc.select("span.all > div > div.intro, div.indent > div > div.intro").first();
-        assert element != null;
-        info.setBookIntroduction(element.text());
-        System.out.println("book introduction: ");
-        System.out.println(element.text());
+        if (element != null) {
+            info.setBookIntroduction(element.text());
+            System.out.println("book introduction: ");
+            System.out.println(element.text());
+        }
 
         // 获取作者简介
         element = doc.select("span.all > div.intro, div.indent > div > div.intro").first();
-        assert element != null;
-        info.setAuthorIntroduction(element.text());
-        System.out.println("author introduction: ");
-        System.out.println(element.text());
+        if (element != null) {
+            info.setAuthorIntroduction(element.text());
+            System.out.println("author introduction: ");
+            System.out.println(element.text());
+        }
 
         // 获取目录
         String cssPattern = "div#dir_" + info.getId() + "_full";
-        System.out.println(cssPattern);
+//        System.out.println(cssPattern);
         element = doc.select(cssPattern).first();
-        assert element != null;
-        info.setDirectory(element.text());
-        System.out.println("directory: ");
-        System.out.println(element.text());
+        if (element != null) {
+            info.setDirectory(element.text());
+            System.out.println("directory: ");
+            System.out.println(element.text());
+        }
     }
 
 }
