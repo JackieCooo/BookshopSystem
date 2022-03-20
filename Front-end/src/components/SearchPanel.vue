@@ -1,14 +1,12 @@
 <template>
-  <el-row :gutter = "20" justify = "space-between">
-    <el-col :span="18">
-      <el-input placeholder="请输入书本名称" v-model="input" size="large">
+  <div>
+    <el-space :size="50">
+      <el-input placeholder="请输入书本名称" v-model="input" class="search-box">
         <template #append>
-          <el-button><el-icon><Search /></el-icon></el-button>
+          <el-button @click="search"><el-icon><Search /></el-icon></el-button>
         </template>
       </el-input>
-    </el-col>
-    <el-col :span = "6">
-      <el-dropdown>
+      <el-dropdown @visible-change="showCart">
         <el-button type="primary" class="shop-cart-btn">
           <el-icon class="el-icon--left"><ShoppingCart /></el-icon>
           购物车
@@ -20,17 +18,22 @@
           </div>
           <div v-else>
             <el-dropdown-menu>
-              <el-dropdown-item>Action 1</el-dropdown-item>
-              <el-dropdown-item>Action 2</el-dropdown-item>
-              <el-dropdown-item>Action 3</el-dropdown-item>
-              <el-dropdown-item>Action 4</el-dropdown-item>
-              <el-dropdown-item>Action 5</el-dropdown-item>
+              <el-dropdown-item v-for="i in cartInfo" :key="i" class="list-item">
+                <el-space alignment="start">
+                  <el-image fit="fill" :src="loadPic(i.id)" class="item-img"></el-image>
+                  <el-space alignment="start" direction="vertical">
+                    <span class="title">{{i.name}}</span>
+                    <span class="brief">{{i.author}} / {{i.publisher}} / {{i.date}}</span>
+                    <span class="price-quantity">¥ {{i.price}}    x{{i.quantity}}</span>
+                  </el-space>
+                </el-space>
+              </el-dropdown-item>
             </el-dropdown-menu>
           </div>
         </template>
       </el-dropdown>
-    </el-col>
-  </el-row>
+    </el-space>
+  </div>
 </template>
 
 <script>
@@ -41,21 +44,48 @@ export default {
   data() {
     return {
       input : '',
-      isCartEmpty: true,
+      cartInfo: null,
     }
   },
   components: {
     Search,
     ArrowDownBold,
     ShoppingCart,
-  }
+  },
+  methods: {
+    async showCart(e) {
+      if (e === true && this.isLogin) {
+        await this.$http.get('user/cart/' + this.$store.state.user.id.toString())
+        .then((res) => {
+          this.cartInfo = res.data.data
+        })
+        .catch((err) => {
+          console.log(err)
+        })
+      }
+    },
+    loadPic(id) {
+      return "http://localhost:8001/api/book/pic/" + id.toString()
+    },
+    search() {
+      this.$router.push('/search/' + this.input)
+    },
+  },
+  computed: {
+    isCartEmpty() {
+      return this.cartInfo === null || this.cartInfo.length === 0
+    },
+    isLogin() {
+      return this.$store.state.isLogin
+    },
+  },
 }
 </script>
 
 <style lang="less" scoped>
-.el-row {
-  margin-top: 20px;
-  height: 75px;
+.search-box {
+  width: 500px;
+  height: 40px;
 }
 
 :deep(.el-input__inner) {
@@ -63,6 +93,7 @@ export default {
   border-top-left-radius: 8px;
   border-bottom-left-radius: 8px;
   border-width: 3px;
+  height: 40px;
 }
 
 :deep(.el-input__inner:hover) {
@@ -70,6 +101,7 @@ export default {
   border-top-left-radius: 8px;
   border-bottom-left-radius: 8px;
   border-width: 3px;
+  height: 40px;
 }
 
 :deep(.el-input-group__append) {
@@ -90,5 +122,28 @@ export default {
 .empty-cart {
   width: 300px;
   height: 250px;
+}
+
+.item-img {
+  width: 80px;
+  height: 100px;
+}
+
+.title {
+  color: #303133;
+  font-weight: bold;
+}
+
+.brief {
+  color: #909399;
+}
+
+.price-quantity {
+  color: #303133;
+  font-size: 20px;
+}
+
+.list-item:hover {
+  background-color: #409EFF;
 }
 </style>

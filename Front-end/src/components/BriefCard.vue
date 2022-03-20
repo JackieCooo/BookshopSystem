@@ -39,6 +39,23 @@
         </el-carousel-item>
       </el-carousel>
     </el-card>
+
+    <el-card v-else-if="type === 'news'">
+      <template #header>
+        <el-row justify="space-between" class="card-header" :body-style="{ padding: '0px' }">
+          <el-col :span="5"><span class="bold-title">{{title}}</span></el-col>
+          <el-col :span="2"><el-button circle :icon="ArrowRight" class="card-btn" @click="gotoPage"></el-button></el-col>
+        </el-row>
+      </template>
+      <el-carousel :autoplay="false" height="150px" arrow="never">
+        <el-carousel-item v-for="i in 3" :key="i">
+          <el-space alignment="start" :size="10" direction="vertical">
+            <span class="bold-title" @click="loadReview(info[i-1].id)">{{info[i-1].title}}</span>
+            <span class="card-content">{{contentFormatting(i-1)}}</span>
+          </el-space>
+        </el-carousel-item>
+      </el-carousel>
+    </el-card>
   </div>
 </template>
 
@@ -79,19 +96,21 @@ export default {
     },
     // 加载图片
     loadPic(id) {
-      if (this.type === 'new' || this.type === 'hot' || this.type === 'review') return "http://localhost:8001/api/book/pic/" + id.toString()
-      else if (this.type === 'news') return ''
+      return this.$store.state.baseUrl + "api/book/pic/" + id.toString()
     },
     // 文本格式化
     contentFormatting(i) {
       let text = '';
       if (this.type === 'new' || this.type === 'hot') text = this.info[i].bookIntroduction
       else if (this.type === 'review') text = this.info[i].intro
+      else if (this.type === 'news') text = this.info[i].content
       return text.length > 100 ? text.substr(0, 80) + '...' : text
     },
+    // 跳转至产品页
     loadProduct(id) {
       this.$router.push('/book/' + id.toString())
     },
+    // 跳转至书评页
     loadReview(id) {
       this.$router.push('/review/' + id.toString())
     },
@@ -118,7 +137,7 @@ export default {
         })
         break
       case 'news':
-        await this.$http.get('')
+        await this.$http.get('api/news?num=3')
         .then((res) => {
           this.info = res.data.data
         })

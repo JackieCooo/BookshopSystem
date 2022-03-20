@@ -2,7 +2,7 @@
   <div>
     <el-space :size="20" alignment="start">
       <el-menu :router="true">
-        <el-menu-item index="member"><h1>会员中心</h1></el-menu-item>
+        <el-menu-item index="/member"><h1>会员中心</h1></el-menu-item>
         <el-sub-menu index="account-center">
           <template #title>
             <h1>账户中心</h1>

@@ -6,11 +6,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 public class User {
-    private Integer id;
-    private String name;
-    private String phone;
-    private String mail;
-    private String gender;
-    private String password;
-    private byte[] pic;
+    private Integer id = null;
+    private String name = null;
+    private String phone = null;
+    private String mail = null;
+    private String gender = null;
+    private String password = null;
+    private byte[] pic = null;
 }

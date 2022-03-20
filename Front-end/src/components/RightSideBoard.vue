@@ -1,12 +1,12 @@
 <template>
-  <div>
+  <div v-if="info != null">
     <div>
       <h3>{{title}}</h3>
     </div>
     <el-menu text-color="#000000" active-text-color="#000000">
-      <el-menu-item v-for="i in newsContent" :key="i">
+      <el-menu-item v-for="i in info" :key="i">
         <el-icon><caret-right /></el-icon>
-        <p>{{i}}</p>
+        <p>{{textFormatting(i.title)}}</p>
       </el-menu-item>
     </el-menu>
   </div>
@@ -25,22 +25,27 @@ export default {
   },
   data() {
     return {
-      newsContent: [
-        '《天津百座建筑中的百年党史》出版',
-        '茅奖大家们解决你这个春天的“书荒”',
-        '日新无已 望如朝曙',
-        '《新时代提案工作丛书》出版',
-        '《中国藏医药影印古籍珍本》（61卷—70卷）即将面世',
-        '2021年《环球科学》最美科学阅读',
-        '《辞海》缩印本获特别奖　17种沪版图书解读上海城市精神',
-        '中央党校出版社推出《大别山红色故事》',
-      ]
+      info: null,
+    }
+  },
+  async created() {
+    await this.$http.get('api/news?num=10')
+    .then((res) => {
+      this.info = res.data.data
+    })
+    .catch((err) => {
+      console.log(err)
+    })
+  },
+  methods: {
+    textFormatting(text) {
+      return text.length > 15 ? text.substr(0, 20) + '...' : text
     }
   }
 }
 </script>
 
-<style scoped>
+<style lang="less" scoped>
 div > h3 {
   color: #337ecc;
   text-align: left;

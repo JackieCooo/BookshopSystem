@@ -2,8 +2,8 @@
   <div>
     <el-space direction="vertical" alignment="start" :size="20">
       <el-space class="block border header" :size="50">
-        <el-avatar :size="80"></el-avatar>
-        <h1>您好，用户名</h1>
+        <el-avatar :size="80" class="margin-left"></el-avatar>
+        <h1>您好，{{getName}}</h1>
       </el-space>
       <el-space class="block" :size="10">
         <InfoCard icon="cart" title="购物车"></InfoCard>
@@ -45,6 +45,11 @@ export default {
     return {
       accountInfo: null,
     }
+  },
+  computed: {
+    getName() {
+      return this.$store.state.user.name
+    }
   }
 }
 </script>
@@ -61,5 +66,9 @@ export default {
 
 .header {
   height: 150px;
+}
+
+.margin-left {
+  margin-left: 20px;
 }
 </style>

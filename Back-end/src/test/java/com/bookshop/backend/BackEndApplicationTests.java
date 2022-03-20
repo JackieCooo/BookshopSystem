@@ -28,6 +28,8 @@ class BackEndApplicationTests {
     private ReviewChartMapper reviewChartMapper;
     @Autowired
     private ReviewMapper reviewMapper;
+    @Autowired
+    private NewsMapper newsMapper;
 
     private final String[] types = {"all", "literary", "history", "social", "novel", "tech", "art", "new"};
 
@@ -42,8 +44,8 @@ class BackEndApplicationTests {
                 Document doc;
 
                 if (i.equals("new"))
-                    doc = RequestUtil.requestHtml("https://book.douban.com/latest?tag=%E5%85%A8%E9%83%A8");
-                else doc = RequestUtil.requestHtml("https://book.douban.com/chart?subcat=" + i);
+                    doc = RequestUtil.requestHtml("https://book.douban.com/latest?tag=%E5%85%A8%E9%83%A8", "gbk");
+                else doc = RequestUtil.requestHtml("https://book.douban.com/chart?subcat=" + i, "gbk");
 
                 if (doc != null) {
                     QueryWrapper<ChartType> wrapper = new QueryWrapper<>();
@@ -57,14 +59,60 @@ class BackEndApplicationTests {
             }
         }
 
-        // 更新书评信息
-        System.out.println("更新书评");
+        if (false) {
+            // 更新书评信息
+            System.out.println("更新书评");
 
-        Document doc = RequestUtil.requestHtml("https://book.douban.com/review/best/");
-        if (doc != null) {
-            extractReviewChart(doc);
+            Document doc = RequestUtil.requestHtml("https://book.douban.com/review/best/", "gbk");
+            if (doc != null) {
+                extractReviewChart(doc);
+            }
         }
 
+        // 更新最新资讯
+        System.out.println("更新最新资讯");
+
+        Document doc = RequestUtil.requestHtml("https://www.nationalreading.gov.cn/ReadBook/channels/6301.shtml", "utf-8");
+        if (doc != null) {
+            extractNews(doc);
+        }
+
+    }
+
+    private void extractNews(Document doc) {
+        Elements elements = doc.select("li > a");
+        for (Element i : elements) {
+            News news = new News();
+
+            // 获取id号
+            String tmp = i.attr("href");
+            Pattern pattern = Pattern.compile("\\d{6}");
+            Matcher matcher = pattern.matcher(tmp);
+            if (matcher.find()) {
+                news.setId(Integer.parseInt(matcher.group(0)));
+                System.out.println("id: " + matcher.group(0));
+            }
+
+            // 获取标题
+            news.setTitle(i.text());
+            System.out.println("title: " + i.text());
+
+            // 获取内容
+            doc = RequestUtil.requestHtml("https://www.nationalreading.gov.cn/ReadBook/contents/6301/" + news.getId() + ".shtml", "utf-8");
+            if (doc != null) {
+                StringBuilder builder = new StringBuilder();
+                Elements p = doc.select("div.zt_m2con > p");
+                for (Element j : p) {
+                    builder.append(j.text());
+                    builder.append('\n');
+                }
+                String content = builder.toString();
+                news.setContent(content);
+                System.out.println(content);
+            }
+
+            newsMapper.insert(news);
+        }
     }
 
     private void extractReviewChart(Document doc) {
@@ -105,7 +153,7 @@ class BackEndApplicationTests {
 
                     String url = "https://book.douban.com/subject/" + book.getId();
 
-                    doc = RequestUtil.requestHtml(url);
+                    doc = RequestUtil.requestHtml(url, "gbk");
 
                     if (doc != null) {
                         BookUtil.extractBookInfo(doc, book);
@@ -144,7 +192,7 @@ class BackEndApplicationTests {
 
             // 获取书评内容
             String url = "https://book.douban.com/review/" + review.getId();
-            doc = RequestUtil.requestHtml(url);
+            doc = RequestUtil.requestHtml(url, "gbk");
             if (doc != null) {
                 extractReviewContent(doc, review);
             }
@@ -215,7 +263,7 @@ class BackEndApplicationTests {
             if (cnt == 0) {
                 String url = "https://book.douban.com/subject/" + id;
 
-                doc = RequestUtil.requestHtml(url);
+                doc = RequestUtil.requestHtml(url, "gbk");
 
                 if (doc != null) {
                     BookUtil.extractBookInfo(doc, book);

@@ -4,20 +4,20 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.bookshop.backend.data.Book;
 import com.bookshop.backend.jsonconvert.JsonResult;
 import com.bookshop.backend.mapper.BookMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.Resource;
 import java.io.IOException;
 
 @RestController
 @RequestMapping("/api")
 public class BookController {
     
-    @Autowired
+    @Resource
     private BookMapper bookMapper;
 
     @GetMapping("/book/{id}")

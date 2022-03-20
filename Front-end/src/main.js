@@ -7,7 +7,7 @@ import axios from 'axios';
 import store from './store'
 
 const app = createApp(App)
-axios.defaults.baseURL = 'http://localhost:8081'
+axios.defaults.baseURL = 'http://192.168.3.154:8001'
 app.config.globalProperties.$http = axios;
 
 app.use(ElementPlus)

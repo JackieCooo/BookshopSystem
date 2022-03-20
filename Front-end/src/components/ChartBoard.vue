@@ -74,7 +74,7 @@ export default {
     },
     // 加载封面图
     loadPic(id) {
-      return "http://localhost:8001/api/book/pic/" + id.toString()
+      return this.$store.state.baseUrl + "api/book/pic/" + id.toString()
     }
   },
 }
@@ -88,7 +88,7 @@ export default {
 
 .chart-box {
   height: 150px;
-  width: 700px;
+  width: 800px;
 }
 
 .el-descriptions {

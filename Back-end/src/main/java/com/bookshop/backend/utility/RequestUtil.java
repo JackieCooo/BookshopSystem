@@ -19,7 +19,7 @@ public class RequestUtil {
 
     private static final String USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/99.0.4844.51 Safari/537.36";
 
-    public static Document requestHtml(String url) {
+    public static Document requestHtml(String url, String encode) {
         System.out.println(url);
 
         // 1.生成httpclient，相当于该打开一个浏览器
@@ -45,7 +45,7 @@ public class RequestUtil {
 
                 // 5.获取响应内容
                 HttpEntity httpEntity = response.getEntity();
-                String tmp = EntityUtils.toString(httpEntity, "GBK");
+                String tmp = EntityUtils.toString(httpEntity, encode);
                 html = Jsoup.parse(tmp);
                 return html;
             }

@@ -15,6 +15,7 @@ import AddressPage from "@/components/AddressPage";
 import CollectionPage from "@/components/CollectionPage";
 import OrderPage from "@/components/OrderPage";
 import ReviewPage from "@/components/ReviewPage";
+import SearchResultPage from "@/components/SearchResultPage";
 
 const StyleChartBoard = {
     template: '<ChartBoard :type="$route.params.type"></ChartBoard>',
@@ -72,6 +73,10 @@ const routes = [
             {path: 'collection', component: CollectionPage},
             {path: 'order', component: OrderPage},
         ]
+    },
+    {
+        path: '/search/:content',
+        component: SearchResultPage,
     },
 ]
 

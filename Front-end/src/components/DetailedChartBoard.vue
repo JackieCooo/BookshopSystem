@@ -87,7 +87,7 @@ export default {
     },
     // 加载封面图
     loadPic(id) {
-      return "http://localhost:8001/api/book/pic/" + id.toString()
+      return this.$store.state.baseUrl + "api/book/pic/" + id.toString()
     },
   },
 }
