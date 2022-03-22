@@ -3,7 +3,7 @@ import {createStore} from 'vuex';
 const store = createStore({
     state: {
         isLogin: false,
-        baseUrl: 'http://192.168.3.154:8001/',
+        baseUrl: 'http://localhost:8001/',
         user: {
             id: null,
             name: null,
